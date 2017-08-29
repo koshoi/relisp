@@ -40,3 +40,9 @@
   (cond
     ((null L) 0)
     (t (+ 1 (len (tail L))))))
+
+(defun mylist (L)
+  (cond
+    ((null L) nil)
+    ((atom L) (list L))
+    (t L)))

@@ -1,16 +1,18 @@
 ;
 
+
 (defun IS (A B N)
   (cond
     ((equal A B) t)
-    (t (format t "~%FAILED ~A" N))))
+    (t (format t "~%FAILED ~A~%<<<GOT      ~A~%>>>EXPECTED ~A~%" N A B))))
 
 (defun IS_NOT (A B N)
   (cond
     ((not (equal A B)) t)
-    (t (format t "~%FAILED ~A" N))))
+    (t (format t "~%FAILED ~A~%<<<GOT      ~A~%>>>EXPECTED ~A~%"  N))))
 
 (defun TEST_UTILS ()
+  (load "utils.lsp")
   (print "UTILS TESTING")
   (IS '(a b) '(a b) "test of test1")
   (IS '(a (a b)) '(a (a b)) "test of test3")
@@ -38,4 +40,26 @@
   (IS (drop 0 '(a b)) '(a b) "drop test1")
   (IS (drop 1 '(a b c)) '(b c) "drop test2")
   (IS (drop 2 '((a b) (a ()) (a b) b)) '((a b) b) "drop test3")
+  (IS (mylist 'a) '(a) "mylist test1")
+  (IS (mylist '()) nil "mylist test2")
+  (IS (mylist '(a)) '(a) "mylist test3")
+  (IS (mylist '(a b)) '(a b) "mylist test4")
+  (print "DONE TESTING"))
+
+(defun TEST_FORMULA ()
+  (load "formula.lsp")
+  (print "TESTING FORMULA")
+  (IS (IsNeg ()) nil "IsNeg test1")
+  (IS (IsNeg '1) nil "IsNeg test2")
+  (IS (IsNeg '!) t "IsNeg test3")
+  (IS (DropNegatives '(a)) '(a) "DropNeg test1")
+  (IS (DropNegatives '(a b)) '(a b) "DropNeg test2")
+  (IS (DropNegatives '()) '() "DropNeg test3")
+  (IS (DropNegatives '(! ! a)) '(a) "DropNeg test4")
+  (IS (DropNegatives '(! a)) '(! a) "DropNeg test5")
+  (IS (DropNegatives '(! ! ! a)) '(! a) "DropNeg test6")
+  (IS (DropNegatives '(! ! ! a ! b ! ! c)) '(! a ! b c) "DropNeg test7")
+  (IS (DropNegatives '(! ! (! a) ! b ! ! c)) '((! a) ! b c) "DropNeg test8")
+  (IS (DropNegatives '(! ! (! a) ((! b)) ! ! c)) '((! a) ((! b)) c) "DropNeg test9")
+  (IS (DropNegatives '(! ! ! ! ! ! ! !)) '() "DropNeg test10")
   (print "DONE TESTING"))
