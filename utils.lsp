@@ -46,3 +46,12 @@
     ((null L) nil)
     ((atom L) (list L))
     (t L)))
+
+(defun lister (&rest L)
+  (list L))
+
+(defun conser (&rest L)
+  L)
+
+(defun same (L)
+  L)

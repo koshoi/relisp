@@ -6,4 +6,3 @@
 (load "formula.lsp")
 (TEST_UTILS)
 (TEST_FORMULA)
-(print (DropNegatives '(a ! ! ! ! b ! ! C)))
