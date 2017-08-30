@@ -34,7 +34,7 @@
   (drop 2 L))
 
 (defun tail3 (L)
-  (dro 3 L))
+  (drop 3 L))
 
 (defun len (L)
   (cond

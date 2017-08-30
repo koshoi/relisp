@@ -80,4 +80,13 @@
   (IS (TakeNegatives '((((! a b))))) '(((((! a) b)))) "TakeNegatives test7")
   (IS (TakeNegatives '((((! a b)) c) ! d)) '(((((! a) b)) c) (! d)) "TakeNegatives test8")
   (IS (TakeNegatives '((((! a b)) c f ! g) ! d)) '(((((! a) b)) c f (! g)) (! d)) "TakeNegatives test9")
+
+  (IS (FormLevel '() '*) nil "FormLevel test1")
+  (IS (FormLevel '(a) '*) '(a) "FormLevel test2")
+  (IS (FormLevel '(a * b) '*) '((a * b)) "FormLevel test3")
+  (IS (FormLevel '(a + b * c) '*) '(a + (b * c)) "FormLevel test4")
+  (IS (FormLevel '(a * b * c) '*) '(((a * b) * c)) "FormLevel test5")
+  (IS (FormLevel '(1 + a * b * c) '*) '(1 + ((a * b) * c)) "FormLevel test6")
+  (IS (FormLevel '(1 + a * (b + 0) * c) '*) '(1 + ((a * (b + 0)) * c)) "FormLevel test7")
+  (IS (FormLevel '(1 + (((! a))) * (b + 0) * c) '*) '(1 + (((((! a))) * (b + 0)) * c)) "FormLevel test8")
   (print "DONE TESTING"))
