@@ -5,6 +5,15 @@
 (defun IsNeg (A)
   (eq A '!))
 
+(defun IsCon (A)
+  (eq A '*))
+
+(defun IsDis (A)
+  (eq A '+))
+
+(defun IsImp (A)
+  (eq A '>))
+
 ; ! ! a -> a
 (defun DropNegatives (L)
   (defun re (X) (DropNegatives X))
@@ -55,5 +64,6 @@
     ((null Ops) L)
     (t (re (FormLevel L (head Ops))))))
 
+; forms formula with following priorities * -> + -> >
 (defun Formula (L)
   (_formula (TakeNegatives (DropNegatives L)) '(* + >)))
