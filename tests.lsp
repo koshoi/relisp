@@ -96,7 +96,7 @@
   (print "START DNF TESTING")
 
   (IS (DropImplic '(a > b)) '((! a) + b) "DropImplic test1")
-  (IS (DropImplic '(a > b * c)) '((! a) + (b * c)) "DropImplic test2")
+  (IS (DropImplic '(a > (b * c))) '((! a) + (b * c)) "DropImplic test2")
   (IS (DropImplic '(a > (b > c))) '((! a) + ((! b) + c)) "DropImplic test3")
   (IS (DropImplic '((((a > b))))) '((! a) + b) "DropImplic test4")
 
