@@ -55,3 +55,16 @@
 
 (defun same (L)
   L)
+
+(defun merge_sets (A B)
+  (defun re (X Y) (merge_sets X Y))
+  (cond
+    ((null B) A)
+    ((is_in (head B) A) (re A (tail B)))
+    (t (re (append A (list (head B))) (tail B)))))
+
+(defun is_in (A L)
+  (cond
+    ((null L) nil)
+    ((equal (head L) A) t)
+    (t (is_in A (tail L)))))

@@ -50,6 +50,25 @@
   (IS (mylist '()) nil "mylist test2")
   (IS (mylist '(a)) '(a) "mylist test3")
   (IS (mylist '(a b)) '(a b) "mylist test4")
+
+  (IS (is_in 'a '()) nil "is_in test1")
+  (IS (is_in 'a '(a)) t "is_in test2")
+  (IS (is_in 'a '(a b)) t "is_in test3")
+  (IS (is_in 'a '(b a)) t "is_in test4")
+  (IS (is_in 'c '(b a)) nil "is_in test5")
+  (IS (is_in '(! a) '(b (! a))) t "is_in test6")
+  (IS (is_in '(! a) '(b (! c))) nil "is_in test7")
+
+  (IS (merge_sets '() '()) '() "merge_sets test1")
+  (IS (merge_sets '(a) '()) '(a) "merge_sets test2")
+  (IS (merge_sets '() '(b)) '(b) "merge_sets test3")
+  (IS (merge_sets '(a) '(b)) '(a b) "merge_sets test4")
+  (IS (merge_sets '(a b) '(b)) '(a b) "merge_sets test5")
+  (IS (merge_sets '(a b) '(c)) '(a b c) "merge_sets test6")
+  (IS (merge_sets '((! a) b) '(a)) '((! a) b a) "merge_sets test7")
+  (IS (merge_sets '((! a) b) '((! a))) '((! a) b) "merge_sets test8")
+  (IS (merge_sets '((! a) b (! c) c d) '(b (! b) (! c) d)) '((! a) b (! c) c d (! b)) "merge_sets test9")
+
   (print "DONE TESTING"))
 
 (defun TEST_FORMULA ()
@@ -111,4 +130,20 @@
   (IS (DropMorgans '(1 * (! (! (a * b))))) '(1 * (a * b)) "DropMorgans test9")
   (IS (DropMorgans '(1 + (! (a + (! (b + c)))))) '(1 + ((! a) * (b + c))) "DropMorgans test10")
   (IS (DropMorgans '(1 + (! (a + (b + c))))) '(1 + ((! a) * ((! b) * (! c)))) "DropMorgans test11")
+  (print "DONE TESTING"))
+
+(defun TEST_DNF ()
+  (load "dnf.lsp")
+  (print "START DNF TESTING")
+
+  (IS (IsElCon '(elementary_conj (a b))) t "elementary_conj test1")
+
+  (IS (_makeElCon 'a) '(elementary_conj (a)) "_makeElCon test1")
+  (IS (_makeElCon '(! a)) '(elementary_conj ((! a))) "_makeElCon test2")
+  (IS (_makeElCon '(a * b)) '(elementary_conj (a b)) "_makeElCon test3")
+  (IS (_makeElCon '((! a) * b)) '(elementary_conj ((! a) b)) "_makeElCon test4")
+  (IS (_makeElCon '((! a) * (! b))) '(elementary_conj ((! a) (! b))) "_makeElCon test5")
+  (IS (_makeElCon '(elementary_conj (a b))) '(elementary_conj (a b)) "_makeElCon test6")
+  (IS (_makeElCon '(elementary_conj ((! a) b))) '(elementary_conj ((! a) b)) "_makeElCon test7")
+
   (print "DONE TESTING"))
