@@ -136,14 +136,25 @@
   (load "dnf.lsp")
   (print "START DNF TESTING")
 
-  (IS (IsElCon '(elementary_conj (a b))) t "elementary_conj test1")
+  (IS (IsElCon '(e_c (a b))) t "e_c test1")
 
-  (IS (_makeElCon 'a) '(elementary_conj (a)) "_makeElCon test1")
-  (IS (_makeElCon '(! a)) '(elementary_conj ((! a))) "_makeElCon test2")
-  (IS (_makeElCon '(a * b)) '(elementary_conj (a b)) "_makeElCon test3")
-  (IS (_makeElCon '((! a) * b)) '(elementary_conj ((! a) b)) "_makeElCon test4")
-  (IS (_makeElCon '((! a) * (! b))) '(elementary_conj ((! a) (! b))) "_makeElCon test5")
-  (IS (_makeElCon '(elementary_conj (a b))) '(elementary_conj (a b)) "_makeElCon test6")
-  (IS (_makeElCon '(elementary_conj ((! a) b))) '(elementary_conj ((! a) b)) "_makeElCon test7")
+  (IS (IsSimple '()) t "IsSimple test1")
+  (IS (IsSimple 'a) t "IsSimple test2")
+  (IS (IsSimple '(! a)) t "IsSimple test3")
+  (IS (IsSimple '((! a) + b)) nil "IsSimple test4")
+  (IS (IsSimple '(a + b)) nil "IsSimple test5")
+
+  (IS (_makeElCon 'a) '(e_c (a)) "_makeElCon test1")
+  (IS (_makeElCon '(! a)) '(e_c ((! a))) "_makeElCon test2")
+  (IS (_makeElCon '(a * b)) '(e_c (a b)) "_makeElCon test3")
+  (IS (_makeElCon '((! a) * b)) '(e_c ((! a) b)) "_makeElCon test4")
+  (IS (_makeElCon '((! a) * (! b))) '(e_c ((! a) (! b))) "_makeElCon test5")
+  (IS (_makeElCon '(e_c (a b))) '(e_c (a b)) "_makeElCon test6")
+  (IS (_makeElCon '(e_c ((! a) b))) '(e_c ((! a) b)) "_makeElCon test7")
+
+  (IS (_mergeElCons '(e_c ()) '(e_c ())) '(e_c ()) "_mergeElCons test1")
+  (IS (_mergeElCons '(e_c (a)) '(e_c ())) '(e_c (a)) "_mergeElCons test2")
+  (IS (_mergeElCons '(e_c (a)) '(e_c (b))) '(e_c (a b)) "_mergeElCons test3")
+  (IS (_mergeElCons '(e_c (a (! a))) '(e_c (b))) '(e_c (a (! a) b)) "_mergeElCons test4")
 
   (print "DONE TESTING"))
