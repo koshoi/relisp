@@ -47,3 +47,6 @@
        ((atom (head2 L)) L)
        (t (re (_deMorgan (head2 L))))))
     (t (mapcar (lambda (A) (re A)) L))))
+
+(defun Modify (L)
+  (DropMorgans (DropImplic L)))

@@ -5,7 +5,7 @@
 ;e_c is a structure that looks like this
 ;(e_c (set)), where set is a set of atoms and (! atoms) that are in elemnatry conjunction
 
-(defun IsELCon (L)
+(defun IsElCon (L)
   (equal (head L) 'e_c))
 
 (defun IsSimple (A)
@@ -20,13 +20,13 @@
 
 (defun _makeElCon (L)
   (cond
-    ((IsELCon L) L)
-    ((atom L) (conser 'e_c (list L)))
-    ((IsNeg (head L)) (conser 'e_c (list L)))
+    ((IsElCon L) L)
+    ((atom L) (conser 'e_c L))
+    ((IsNeg (head L)) (conser 'e_c L))
     ((IsCon (head2 L)) (_mergeElCons (_makeElCon (head L)) (_makeElCon (head3 L))))))
 
 (defun _mergeElCons (A B)
-  (conser 'e_c (merge_sets (head2 A) (head2 B))))
+  (append (list 'e_c) (merge_sets (tail A) (tail B))))
 
 ; Transforms every element to e_c structure
 ; a -> (e_c (a))
@@ -46,14 +46,15 @@
 (defun _mergeSetsElCons (A B)
   (defun pretty (X) (mapcan (lambda (Y) Y) X))
   (pretty (mapcar (lambda (X) (mapcar (lambda (Y) (_mergeElCons X Y)) B)) A)))
-; (((E_C (A B)) (E_C (A C))) ((E_C ((! A) B)) (E_C ((! A) C))))
-; (((E_C (A B)) (E_C (A C))) ((E_C ((! A) B)) (E_C ((! A) C))))
 
 
 (defun CollectElCons (L)
-  (defun re (X) (CollectElCons X))
+  (defun recall (X) (CollectElCons X))
   (cond
     ((IsElCon L) (conser L))
-    ((IsDis (head2 L)) (conser (re (head L)) (re (head3 L))))
-    ((IsCon (head2 L)) (_mergeSetsElCons (re (head L)) (re (head3 L))))
-    (t (format t "STRANGE THING ~A~%" L))))
+    ((IsDis (head2 L)) (append (recall (head L)) (recall (head3 L))))
+    ((IsCon (head2 L)) (_mergeSetsElCons (recall (head L)) (recall (head3 L))))
+    (t L)))
+
+(defun Transform (L)
+  (mapcar (lambda (X) (tail X)) (CollectElCons (_startElCons L))))
