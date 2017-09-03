@@ -157,4 +157,47 @@
   (IS (_mergeElCons '(e_c (a)) '(e_c (b))) '(e_c (a b)) "_mergeElCons test3")
   (IS (_mergeElCons '(e_c (a (! a))) '(e_c (b))) '(e_c (a (! a) b)) "_mergeElCons test4")
 
+  (IS (_startElCons '(a)) '((e_c (a))) "_startElCons test1")
+  (IS (_startElCons '(a + b)) '((e_c (a)) + (e_c (b))) "_startElCons test2")
+  (IS (_startElCons '((! a) + b)) '((e_c ((! a))) + (e_c (b))) "_startElCons test3")
+  (IS (_startElCons '((! a) + (b + c))) '((e_c ((! a))) + ((e_c (b)) + (e_c (c)))) "_startElCons test4")
+  (IS (_startElCons '(a + (b + (! c)))) '((e_c (a)) + ((e_c (b)) + (e_c ((! c))))) "_startElCons test5")
+  (IS (_startElCons '(a + (b + (c * d)))) '((e_c (a)) + ((e_c (b)) + ((e_c (c)) * (e_c (d))))) "_startElCons test6")
+  (IS (_startElCons '((a * 0) + (b + (c * d)))) '(((e_c (a)) * (e_c (0))) + ((e_c (b)) + ((e_c (c)) * (e_c (d))))) "_startElCons test7")
+
+  (IS (_mergeSetsElCons '((e_c (a))) '((e_c (b)))) '((e_c (a b))) "_mergeSetsElCons test1")
+  (IS (_mergeSetsElCons '((e_c (a)) (e_c ((! a)))) '((e_c (b)))) '((e_c (a b)) (e_c ((! a) b))) "_mergeSetsElCons test2")
+  (IS (_mergeSetsElCons
+        '((e_c (a)) (e_c ((! a))))
+        '((e_c (b)) (e_c (c))))
+      '((e_c (a b)) (e_c (a c)) (e_c ((! a) b)) (e_c ((! a) c)))
+      "_mergeSetsElCons test3")
+  (IS (_mergeSetsElCons
+        '((e_c (a)) (e_c ((! a))) (e_c (x y)))
+        '((e_c (b)) (e_c (c))))
+      '((e_c (a b)) (e_c (a c)) (e_c ((! a) b)) (e_c ((! a) c)) (e_c (x y b)) (e_c (x y c)))
+      "_mergeSetsElCons test4")
+  (IS (_mergeSetsElCons
+        '((e_c (a)) (e_c ((! a))) (e_c (x y)))
+        '((e_c (b)) (e_c (c (! e)))))
+      '((e_c (a b)) (e_c (a c (! e))) (e_c ((! a) b)) (e_c ((! a) c (! e))) (e_c (x y b)) (e_c (x y c (! e))))
+      "_mergeSetsElCons test5")
+  (IS (_mergeSetsElCons
+        '((e_c (a)) (e_c ((! a))) (e_c (x y)))
+        '((e_c (b)) (e_c (c)) (e_c (e))))
+      '((e_c (a b)) (e_c (a c)) (e_c (a e)) (e_c ((! a) b)) (e_c ((! a) c)) (e_c ((! a) e)) (e_c (x y b)) (e_c (x y c)) (e_c (x y e)))
+      "_mergeSetsElCons test6")
+
+  (IS (CollectElCons '(e_c (a))) '((e_c (a))) "CollectElCons test1")
+  (IS (CollectElCons '((e_c (a)) + (e_c (b)))) '(((e_c (a))) ((e_c (b)))) "CollectElCons test2")
+  (IS (CollectElCons '((e_c (a)) * (e_c (b)))) '((e_c (a b))) "CollectElCons test3")
+  (IS (CollectElCons '((e_c (a)) + ((e_c (b)) * (e_c (c))))) '(((e_c (a))) ((e_c (b c)))) "CollectElCons test4")
+  (IS (CollectElCons '((e_c (a)) * ((e_c (b)) + (e_c (c))))) '(((e_c (a))) ((e_c (b c)))) "CollectElCons test5")
+  (IS (CollectElCons '((e_c (b)) * ((e_c (c)) + (e_c (d)))))
+      '((e_c (b c)) (e_c (b d)))
+      "CollectElCons test6")
+  (IS (CollectElCons '((e_c (a)) + ((e_c (b)) * ((e_c (c)) + (e_c (d))))))
+      '(((e_c (a))) ((e_c (b c)) (e_c (b d))))
+      "CollectElCons test7")
+
   (print "DONE TESTING"))

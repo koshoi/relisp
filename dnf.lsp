@@ -15,6 +15,9 @@
     ((and (IsNeg (head A)) (atom (head2 A))) t)
     (t nil)))
 
+(defun IsSimpleList (L)
+  (reduce (lambda (A B) (and A B)) (mapcar (lambda (X) (IsSimple X)) L)))
+
 (defun _makeElCon (L)
   (cond
     ((IsELCon L) L)
@@ -24,3 +27,33 @@
 
 (defun _mergeElCons (A B)
   (conser 'e_c (merge_sets (head2 A) (head2 B))))
+
+; Transforms every element to e_c structure
+; a -> (e_c (a))
+; (! a) -> (e_c ((! a)))
+; + -> +
+; * -> *
+(defun _startElCons (L)
+  (defun re (X)
+    (cond
+      ((or (IsDis X) (IsCon X)) X)
+      ((IsSimple X) (_makeElCon X))
+      (t (conser (_startElCons (head X)) (head2 X) (_startElCons (head3 X))))))
+  (cond
+    ((IsSimple L) (_makeElCon L))
+    (t (same (mapcar (lambda (Y) (re Y)) (mylist L))))))
+
+(defun _mergeSetsElCons (A B)
+  (defun pretty (X) (mapcan (lambda (Y) Y) X))
+  (pretty (mapcar (lambda (X) (mapcar (lambda (Y) (_mergeElCons X Y)) B)) A)))
+; (((E_C (A B)) (E_C (A C))) ((E_C ((! A) B)) (E_C ((! A) C))))
+; (((E_C (A B)) (E_C (A C))) ((E_C ((! A) B)) (E_C ((! A) C))))
+
+
+(defun CollectElCons (L)
+  (defun re (X) (CollectElCons X))
+  (cond
+    ((IsElCon L) (conser L))
+    ((IsDis (head2 L)) (conser (re (head L)) (re (head3 L))))
+    ((IsCon (head2 L)) (_mergeSetsElCons (re (head L)) (re (head3 L))))
+    (t (format t "STRANGE THING ~A~%" L))))
