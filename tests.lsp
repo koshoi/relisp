@@ -197,3 +197,50 @@
   (IS (CollectElCons '(((e_c a) * (e_c 0)) + ((e_c b) + ((e_c c) * (e_c d))))) '((e_c a 0) (e_c b) (e_c c d)) "CollectElCons test7")
 
   (print "DONE TESTING"))
+
+(defun TEST_BLAKE ()
+  (load "blake.lsp")
+  (print "START BLAKE TESTING")
+
+  (IS (_dropWithZeros '()) '() "_dropZeros test1")
+  (IS (_dropWithZeros '((a))) '((a)) "_dropZeros test2")
+  (IS (_dropWithZeros '(((! a)))) '(((! a))) "_dropZeros test3")
+  (IS (_dropWithZeros '((a b))) '((a b)) "_dropZeros test4")
+  (IS (_dropWithZeros '((a b 0))) '() "_dropZeros test5")
+  (IS (_dropWithZeros '((a b) ((! c) 0))) '((a b)) "_dropZeros test6")
+  (IS (_dropWithZeros '((a b) ((! c) 0) (f e 0))) '((a b)) "_dropZeros test7")
+  (IS (_dropWithZeros '((a b) (0) (f e 0))) '((a b)) "_dropZeros test8")
+
+  (IS (_dropOnes '()) '() "_dropWithOnes test1")
+  (IS (_dropOnes '((a))) '((a)) "_dropWithOnes test2")
+  (IS (_dropOnes '((a b))) '((a b)) "_dropWithOnes test3")
+  (IS (_dropOnes '((a b 1))) '((a b)) "_dropWithOnes test4")
+  (IS (_dropOnes '((a b 1) ((! c)))) '((a b) ((! c))) "_dropWithOnes test5")
+  (IS (_dropOnes '((a b 1) ((! c) 1))) '((a b) ((! c))) "_dropWithOnes test6")
+  (IS (_dropOnes '((1 a b) ((! c) 1) (d (! f)))) '((a b) ((! c)) (d (! f))) "_dropWithOnes test7")
+  (IS (_dropOnes '((1) ((! c) 1) (d (! f)))) '((1) ((! c)) (d (! f))) "_dropWithOnes test8")
+
+  (IS (_negConstants '((a))) '((a)) "_negConstants test1")
+  (IS (_negConstants '((a b))) '((a b)) "_negConstants test2")
+  (IS (_negConstants '((a b (! 1)))) '((a b 0)) "_negConstants test3")
+  (IS (_negConstants '((a b (! c)))) '((a b (! c))) "_negConstants test4")
+  (IS (_negConstants '((a b (! c)) ((! 1) (! 0) (! a)))) '((a b (! c)) (0 1 (! a))) "_negConstants test5")
+
+  (IS (_dropAntipodes '((a))) '((a)) "_dropAntipodes test1")
+  (IS (_dropAntipodes '((a b))) '((a b)) "_dropAntipodes test2")
+  (IS (_dropAntipodes '((a b) (c (! c)))) '((a b)) "_dropAntipodes test3")
+  (IS (_dropAntipodes '((a b) (c (! c) d))) '((a b)) "_dropAntipodes test4")
+  (IS (_dropAntipodes '((a b) (c (! c) d) (e (! f)) (g 1 (! h) (! g)))) '((a b) (e (! f))) "_dropAntipodes test5")
+
+  (IS (_intersections '() '()) '() "_intersections test1")
+  (IS (_intersections '(a) '(b)) '() "_intersections test2")
+  (IS (_intersections '(a) '(a b)) '(a) "_intersections test3")
+  (IS (_intersections '(a b) '(a b)) '(a b) "_intersections test4")
+  (IS (_intersections '(a b c) '(a b)) '(a b) "_intersections test5")
+  (IS (_intersections '((! a) b c) '(a b)) '(b) "_intersections test6")
+  (IS (_intersections '((! a) (! b) c) '(a b)) '() "_intersections test7")
+  (IS (_intersections '((! a) (! b) c) '(a b c)) '(c) "_intersections test8")
+
+
+  (print "DONE TESTING"))
+

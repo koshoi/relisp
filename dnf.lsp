@@ -48,6 +48,7 @@
   (pretty (mapcar (lambda (X) (mapcar (lambda (Y) (_mergeElCons X Y)) B)) A)))
 
 
+; makes set of elementary conjunctions of formula
 (defun CollectElCons (L)
   (defun recall (X) (CollectElCons X))
   (cond
@@ -56,5 +57,6 @@
     ((IsCon (head2 L)) (_mergeSetsElCons (recall (head L)) (recall (head3 L))))
     (t L)))
 
+; takes formula with ! + * only and transforms it to sets that implicate elementary conjunctions
 (defun Transform (L)
   (mapcar (lambda (X) (tail X)) (CollectElCons (_startElCons L))))
