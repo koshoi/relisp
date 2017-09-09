@@ -69,6 +69,12 @@
   (IS (merge_sets '((! a) b) '((! a))) '((! a) b) "merge_sets test8")
   (IS (merge_sets '((! a) b (! c) c d) '(b (! b) (! c) d)) '((! a) b (! c) c d (! b)) "merge_sets test9")
 
+  (IS (dropFromSet 'a '(b c d)) '(b c d) "dropFromSet test1")
+  (IS (dropFromSet 'a '(a b c d)) '(b c d) "dropFromSet test2")
+  (IS (dropFromSet '(! a) '(a b c d)) '(a b c d) "dropFromSet test3")
+  (IS (dropFromSet '(! a) '((! a) b c d)) '(b c d) "dropFromSet test4")
+  (IS (dropFromSet 'c '(a b c d)) '(a b d) "dropFromSet test5")
+
   (print "DONE TESTING"))
 
 (defun TEST_FORMULA ()
@@ -241,6 +247,28 @@
   (IS (_intersections '((! a) (! b) c) '(a b)) '() "_intersections test7")
   (IS (_intersections '((! a) (! b) c) '(a b c)) '(c) "_intersections test8")
 
+  (IS (_intersect '(a) '(b)) '((a) (b)) "_intersect test1")
+  (IS (_intersect '((! a)) '(a b)) '(((! a)) (a b) (b)) "_intersect test2")
+  (IS (_intersect '(a b) '((! b) c)) '((a b) ((! b) c) (a c)) "_intersect test3")
+  (IS (_intersect '(a (! b) c) '((! a) b d)) '((a (! b) c) ((! a) b d) ((! b) c b d) (a c (! a) d)) "_intersect test4")
+  (IS (_intersect '(a) '((! a))) '((a) ((! a))) "_intersect test5")
+  (IS (_intersect '(a) '((! a) b)) '((a) ((! a) b) (b)) "_intersect test6")
+  (IS (_intersect '((! a)) '(a b)) '(((! a)) (a b) (b)) "_intersect test7")
+
+  (IS (_canAbsorb '(a) '(a b)) t "_canAbsorb test1")
+  (IS (_canAbsorb '(a) '(c b)) nil "_canAbsorb test2")
+  (IS (_canAbsorb '(a (! c) d) '(d (! c) f e q a)) t "_canAbsorb test3")
+  (IS (_canAbsorb '(a (! c) d) '(d (! c) f e q d)) nil "_canAbsorb test4")
+
+  (IS (_makeAbsorbs '((a) (a b) (b c a))) '((a)) "_makeAbsorbs test1")
+  (IS (_makeAbsorbs '((a) (a b) (b c d))) '((a) (b c d)) "_makeAbsorbs test2")
+  (IS (_makeAbsorbs '((a) (a b) (b c d) ((! a)))) '((a) (b c d) ((! a))) "_makeAbsorbs test3")
+  (IS (_makeAbsorbs '((a b) (a b) (b c d) (b a c d))) '((a b) (b c d)) "_makeAbsorbs test4")
+  (IS (_makeAbsorbs '((b) (a b) (b c d) (b a c d))) '((b)) "_makeAbsorbs test5")
+
+  (IS (_blake '((a b) (c d))) '((a b) (c d)) "_blake test1")
+  (IS (_blake '((a b) (b d))) '((a b) (b d)) "_blake test2")
+  (IS (_blake '((a b) (b d a))) '((a b)) "_blake test3")
 
   (print "DONE TESTING"))
 

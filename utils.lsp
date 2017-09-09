@@ -68,3 +68,6 @@
     ((null L) nil)
     ((equal (head L) A) t)
     (t (is_in A (tail L)))))
+
+(defun dropFromSet (A L)
+  (mapcan (lambda (X) (cond ((equal A X) nil) (t (list X)))) L))

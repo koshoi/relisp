@@ -4,7 +4,7 @@
 (load "formula.lsp")
 
 (defun _drops (L)
-  (_dropWithZeros (_dropOnes (_negConstants L))))
+  (_dropAntipodes (_dropWithZeros (_dropOnes (_negConstants L)))))
 
 ; (a b) (c d 0) -> (a b)
 (defun _dropWithZeros (L)
@@ -43,7 +43,44 @@
     (t (_intersections (tail A) B))))
 
 ; (a b) (c d) -> ()
-; (a b) (a d) -> (a b) (a d) (b d)
-; (a b c) (a d) -> (a b c) (a d) (b c d)
-; (a b c) (a b d) -> (a b c) (a b d) (b c d) (a c d)
-(defun _intersect (A B))
+; (a b) (a d) -> (a b) (a d)
+; (a b) ((! a) d) -> (a b) ((! a) d) (b d)
+; (a b c) ((! a) d) -> (a b c) ((! a) d) (b c d)
+; (a b c) ((! a) (! b) d) -> (a b c) ((! a) (! b) d) (b (! b) c d) (a c (! a) d)
+(defun _intersect (A B)
+  (defun re (X Y) (_intersect X Y))
+  (defun _d (X Y) (dropFromSet X Y))
+  (defun antipode (X) (cond ((IsNeg (head X)) (head2 X)) (t (conser '! x))))
+  (defun _neglist (L) (mapcar (lambda (X) (antipode X)) L))
+  (defun f (L) (cond ((null L) nil) (t (list L))))
+  (append
+    (conser A B)
+    (mapcan (lambda (X) (f (merge_sets (_d X A) (_d (antipode X) B)))) (_intersections A (_neglist B)))))
+
+(defun _intersectAll (L)
+  (defun recall (X) (_intersectAll X))
+  (cond
+    ((null L) nil)
+    ((eq (len L) 1) nil)
+    (t (append (mapcan (lambda (X) (_intersect (head L) X)) (tail L)) (recall (tail L))))))
+
+; returns bool whether A can absorb B
+; (a) (a b) -> t
+; (a) (c b) -> nil
+(defun _canAbsorb (A B)
+  (reduce (lambda (X Y) (and X Y)) (mapcar (lambda (Z) (is_in Z B)) A)))
+
+; absorbs everything absorbable with first element of the list
+(defun _makeAbsorbs (L)
+  (defun re (X) (_makeAbsorbs X))
+  (defun absorb (A B) (cond ((_canAbsorb A B) nil) (t (list B))))
+  (defun f (X) (append (list (head X)) (mapcan (lambda (Y) (absorb (head X) Y)) (tail X))))
+  (cond
+    ((null L) nil)
+    (t (append (list (head L)) (re (tail (f L)))))))
+
+(defun _blake (L)
+  (reverse (_makeAbsorbs (reverse (_makeAbsorbs (_intersectAll L))))))
+
+(defun Blake (L)
+  (_blake (_drops L)))
