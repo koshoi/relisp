@@ -269,6 +269,24 @@
   (IS (_blake '((a b) (c d))) '((a b) (c d)) "_blake test1")
   (IS (_blake '((a b) (b d))) '((a b) (b d)) "_blake test2")
   (IS (_blake '((a b) (b d a))) '((a b)) "_blake test3")
+  (IS (_blake '((a b) ((! a) c d) (b d) ((! b) d))) '((a b) (d)) "_blake test4")
 
   (print "DONE TESTING"))
 
+(defun TEST_FORMAT ()
+  (load "formatter.lsp")
+  (print "START FORMATTER TESTING")
+
+  (IS (_isFinalTrue '((a b) (c d))) '((a b) (c d)) "_isFinalTrue test1")
+  (IS (_isFinalTrue '((a b) (c d) (1))) '((1)) "_isFinalTrue test2")
+
+  (IS (_isFinalFalse '((a b) (c d))) '((a b) (c d)) "_isFinalFalse test1")
+  (IS (_isFinalFalse '()) '((0)) "_isFinalFalse test2")
+
+  (IS (_addOpers '(a b c) '+) '(a + b + c) "_addOpers test1")
+  (IS (_addOpers '(a b c (! d)) '+) '(a + b + c + (! d)) "_addOpers test2")
+
+  (IS (FinalFormat '((a b) (c d))) '((a * b) + (c * d)) "FinalFormat test1")
+
+  (print "DONE TESTING")
+)
