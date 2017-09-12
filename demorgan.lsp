@@ -50,3 +50,4 @@
 
 (defun Modify (L)
   (DropMorgans (DropImplic L)))
+

@@ -60,3 +60,4 @@
 ; takes formula with ! + * only and transforms it to sets that implicate elementary conjunctions
 (defun Transform (L)
   (mapcar (lambda (X) (tail X)) (CollectElCons (_startElCons L))))
+

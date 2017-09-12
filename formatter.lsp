@@ -21,3 +21,4 @@
 
 (defun FinalFormat (L)
   (_addOpers (mapcar (lambda (X) (_addOpers X '*)) (_isFinalFalse (_isFinalTrue L))) '+))
+

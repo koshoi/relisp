@@ -71,3 +71,4 @@
 
 (defun dropFromSet (A L)
   (mapcan (lambda (X) (cond ((equal A X) nil) (t (list X)))) L))
+

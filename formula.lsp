@@ -67,3 +67,4 @@
 ; forms formula with following priorities * -> + -> >
 (defun Formula (L)
   (_formula (TakeNegatives (DropNegatives L)) '(* + >)))
+
